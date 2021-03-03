@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tan.tools.dao.SysEmailConfigurationDao">
+
+    <resultMap id="BaseResultMap" type="com.tan.tools.entity.SysEmailConfiguration">
+        <!--@Table sys_email_configuration-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="brandUnitNo" column="brand_unit_no" jdbcType="VARCHAR"/>
+        <result property="brandUnitName" column="brand_unit_name" jdbcType="VARCHAR"/>
+        <result property="emailAddr" column="email_addr" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!-- table 所有列 -->
+    <sql id="Base_Column_List">
+        id,        
+        brand_unit_no,        
+        brand_unit_name,        
+        email_addr,        
+        status,        
+        remark,        
+        create_user,        
+        create_time,        
+        update_time,        
+        update_user        
+    </sql>
+    
+    <!-- 所有查询条件-->
+     <sql id="condition" >
+            <if test="params.id!= null">
+                and id = #{params.id}
+            </if>
+            <if test="params.brandUnitNo!= null and !''.equals(params.brandUnitNo)">
+                and brand_unit_no = #{params.brandUnitNo}
+            </if>
+            <if test="params.brandUnitName!= null and !''.equals(params.brandUnitName)">
+                and brand_unit_name = #{params.brandUnitName}
+            </if>
+            <if test="params.emailAddr!= null and !''.equals(params.emailAddr)">
+                and email_addr = #{params.emailAddr}
+            </if>
+            <if test="params.status!= null">
+                and status = #{params.status}
+            </if>
+            <if test="params.remark!= null and !''.equals(params.remark)">
+                and remark = #{params.remark}
+            </if>
+            <if test="params.createUser!= null and !''.equals(params.createUser)">
+                and create_user = #{params.createUser}
+            </if>
+            <if test="params.createTime!= null">
+                and create_time = #{params.createTime}
+            </if>
+            <if test="params.updateTime!= null">
+                and update_time = #{params.updateTime}
+            </if>
+            <if test="params.updateUser!= null and !''.equals(params.updateUser)">
+                and update_user = #{params.updateUser}
+            </if>
+     </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List" />
+        from sys_email_configuration
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List" />
+        from sys_email_configuration
+        limit #{offset}, #{limit}
+    </select>
+    
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+           <include refid="Base_Column_List" />
+        from sys_email_configuration
+        <where>
+         <include refid="condition" />
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO sys_email_configuration(brand_unit_no, brand_unit_name, email_addr, status, remark, create_user, create_time, update_time, update_user)
+        VALUES(#{brandUnitNo}, #{brandUnitName}, #{emailAddr}, #{status}, #{remark}, #{createUser}, #{createTime}, #{updateTime}, #{updateUser})
+    </insert>
+    
+    
+    <!-- 选择列插入-->
+    <insert id="insertSelective" parameterType="com.tan.tools.entity.SysEmailConfiguration">
+      INSERT INTO sys_email_configuration
+         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="brandUnitNo != null and brandUnitNo != ''">
+                brand_unit_no,
+            </if>
+            <if test="brandUnitName != null and brandUnitName != ''">
+                brand_unit_name,
+            </if>
+            <if test="emailAddr != null and emailAddr != ''">
+                email_addr,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user,
+            </if>
+         </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides="," >
+             <if test="brandUnitNo != null and brandUnitNo != ''">
+                #{brandUnitNo},
+            </if>
+            <if test="brandUnitName != null and brandUnitName != ''">
+                #{brandUnitName},
+            </if>
+            <if test="emailAddr != null and emailAddr != ''">
+                #{emailAddr},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                #{createUser},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                #{updateUser},
+            </if>
+         </trim>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update" parameterType="com.tan.tools.entity.SysEmailConfiguration">
+        update sys_email_configuration
+        <set>
+            <if test="brandUnitNo != null and brandUnitNo != ''">
+                brand_unit_no = #{brandUnitNo},
+            </if>
+            <if test="brandUnitName != null and brandUnitName != ''">
+                brand_unit_name = #{brandUnitName},
+            </if>
+            <if test="emailAddr != null and emailAddr != ''">
+                email_addr = #{emailAddr},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sys_email_configuration where id = #{id}
+    </delete>
+
+
+    <!-- 汇总 -->
+    <select id="selectCount" resultType="java.lang.Integer" >
+        SELECT COUNT(1) as s FROM sys_email_configuration WHERE 1=1
+        <include refid="condition" />
+    </select>
+    <!--分页-->
+    <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_email_configuration WHERE 1=1
+        <include refid="condition" />
+        <if test="orderByField != null and !''.equals(orderByField)" >
+            ORDER BY ${orderByField}
+            <if test="orderByField" >
+                ${orderBy}
+            </if>
+        </if>
+        LIMIT #{page.startRowNum} ,#{page.pageSize}
+    </select>
+     <!-- 参数查询 -->
+    <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM  sys_email_configuration  WHERE 1=1
+        <include refid="condition" />
+    </select>
+    
+    
+</mapper>

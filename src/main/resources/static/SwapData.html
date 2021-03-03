@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>对调数据处理</title>
+</head>
+<body>
+<div>
+    对调类别:
+    <select id="table" name="table">
+        <option value="shoe">鞋类</option>
+        <option value="73h">73H</option>
+    </select>
+    大区：
+    <input id="region" name="region" value="Z" />
+    </br>
+    单据编号：
+    <textarea id="BathBalance" rows="10" cols="200"></textarea>
+</div>
+    <br>
+<input type="button" value="显示/关闭" onclick="
+   if(document.getElementById('sqldiv').style.display=='none'){
+       document.getElementById('sqldiv').style.display='block';
+   }else{
+        document.getElementById('sqldiv').style.display='none';
+   }
+">
+<div id="sqldiv" style="display: none">
+    鞋:<br/>
+    <textarea id="shoeSql" rows="4" cols="240">
+/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag='U010101_&z&' */ &&brn&&
+UPDATE inventory_financial_book SET bill_type=1371, in_out_flag=CASE WHEN in_out_flag=100 THEN in_out_flag ELSE -in_out_flag END WHERE bill_no='&bb&' AND account_type=2; &&brn&&
+ /*#mycat:sql=select 1 from bill_shop_balance where sharding_flag='U010101_&z&' */ &&brn&&
+ UPDATE inventory_financial_book SET bill_type=1372,in_out_flag=CASE WHEN in_out_flag=100 THEN in_out_flag ELSE -in_out_flag END WHERE bill_no='&bb&' AND account_type=-1; &&brn&&
+    </textarea>
+    73H:<br/>
+    <textarea id="73HSql" rows="6" cols="250">
+/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag='U010101_&z&' */ &&brn&&
+ UPDATE inventory_financial_book SET bill_type=1371,order_unit_no_to = order_unit_no_from,in_out_flag= -1 WHERE bill_no='&bb&'  AND account_type=2; &&brn&&
+/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag='U010101_&z&' */ &&brn&&
+ UPDATE inventory_financial_book SET bill_type=1372, in_out_flag= -99 WHERE bill_no='&bb&' AND account_type= -1; &&brn&&
+/*#mycat:sql=select 1 from bill_shop_balance where sharding_flag='U010101_&z&' */ &&brn&&
+UPDATE bill_sale_balance SET fas_bill_code = 'unknow' WHERE original_bill_no='&bb&'; &&brn&&
+    </textarea>
+
+</div>
+<br/>
+<input type="button" value="生成" onclick="
+  var zone=document.getElementById('region').value;
+  var table=document.getElementById('table').value;
+  var BathBalance=document.getElementById('BathBalance').value;
+  if(BathBalance.length==0){
+      alert('单据编号不能为空');
+      return ;
+  }
+
+  console.log(zone+'===='+table);
+  if(zone.length>0){
+      if(table==='shoe'){
+            var shoeSql=document.getElementById('shoeSql').value;
+            var balances=BathBalance.split(' ');
+            var zshoeSql=shoeSql.replaceAll('&z&',zone).replaceAll('&&brn&&','</br>');
+            var showSqlData='';
+            for (i=0;i<balances.length;i++){
+                showSqlData+=' \t\n'+zshoeSql.replaceAll('&bb&',balances[i]);
+                showSqlData+='##################======================'+balances[i]+'结束================================###################</br>'
+            }
+            document.getElementById('showSql').innerHTML=showSqlData;
+            console.log(shoeSql+'--------'+balances+'-------'+zshoeSql+'========'+showSqlData);
+      }
+      if(table==='73h'){
+            var sql73=document.getElementById('73HSql').value;
+            var balances=BathBalance.split(' ');
+            var sql73=sql73.replaceAll('&z&',zone).replaceAll('&&brn&&','</br>');
+            var showSqlData='';
+            for (i=0;i<balances.length;i++){
+                showSqlData+=' \t\n'+sql73.replaceAll('&bb&',balances[i]);
+                showSqlData+='##################======================'+balances[i]+'结束================================###################</br>'
+            }
+            document.getElementById('showSql').innerHTML=showSqlData;
+            console.log(shoeSql+'--------'+balances+'-------'+sql73+'========'+showSqlData);
+      }
+
+
+  }else{
+      alert('大区必须输入');
+  }
+"> <br/>
+生成区:<br/>
+<div id="showSql">
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL刷单处理</title>
+    <script>
+        function clickinit(){
+            var fields=document.getElementById("fields").value.split(",");
+            var whereFields=document.getElementById("whereFields").value.split(",");
+
+
+
+             // alert("拆解框框"+fields.length+"======"+whereFields.length);
+            var divHtml="数据输入点：</br>";
+            divHtml+="更新值输入框：</br>"
+            for (var i=0;i<fields.length;i++){
+                divHtml+=""+fields[i]+" : <input type='text' id='field_tanli_"+fields[i]+"' style=\"width:200px;height:150px\" value=''/>";
+            }
+            divHtml+="</br>"
+            divHtml+="Where条件输入框：</br>"
+            for (var s=0;s<whereFields.length;s++){
+                divHtml+=" "+whereFields[s]+": <input type='text' id='where_tanli_"+whereFields[s]+"' style=\"width:200px;height:150px\" value=''/>";
+            }
+            document.getElementById("inputText").innerHTML=divHtml;
+        }
+
+        function assemblySQL(){
+            var fields=document.getElementById("fields").value.split(",");
+            var whereFields=document.getElementById("whereFields").value.split(",");
+            var sqlValue=document.getElementById("SQLRigth").value;
+            var fieldsmap=new Map();
+            var wheremap=new Map();
+
+            var maxsize=0;
+
+            for (var i=0;i<fields.length;i++){
+                var key="field_tanli_"+fields[i];
+                var value=document.getElementById(key).value.split(" ");
+                if(maxsize<value.length){
+                    maxsize=value.length;
+                }
+                fieldsmap.set(key,value);
+
+            }
+            for (var i=0;i<whereFields.length;i++){
+                var key="where_tanli_"+whereFields[i];
+                var value=document.getElementById(key).value.split(" ");
+                if(maxsize<value.length){
+                    maxsize=value.length;
+                }
+                wheremap.set(key,value)
+            }
+
+            if(maxsize<0 || maxsize==0){
+                alert("参数有异常");
+                return;
+            }
+
+            var sqlData="";
+            var table =document.getElementById("table").value;
+            //自定义优先
+            var customTable =document.getElementById("customTable").value;
+            if (customTable.length>0){
+                table=customTable;
+            }
+
+            for (x=0;x<maxsize;x++){
+
+
+                var assemblySQL=" UPDATE "+table+" SET "
+
+                for (var i=0;i<fields.length;i++){
+                    var key="field_tanli_"+fields[i];
+                    var value=document.getElementById(key).value.split(" ");
+                    if(key.toLocaleUpperCase().indexOf("COST")!=-1){
+                        assemblySQL+=" "+fields[i]+"="+(value[x]==undefined?value[0]:value[x]);
+                    }else{
+
+                        assemblySQL+=" "+fields[i]+"='"+(value[x]==undefined?value[0]:value[x])+"'";
+                    }
+
+                    if(fields.length-1==i){
+                        assemblySQL+="";
+                    }else{
+                        assemblySQL+=","
+                    }
+                }
+                assemblySQL+=" WHERE "
+                for (var i=0;i<whereFields.length;i++){
+                    var key="where_tanli_"+whereFields[i];
+                    var value=document.getElementById(key).value.split(" ");
+
+                    if(key.toLocaleUpperCase().indexOf("COST")!=-1){
+                        assemblySQL+=" "+whereFields[i]+"="+(value[x]==undefined?value[0]:value[x]);
+                    }else{
+                        assemblySQL+=" "+whereFields[i]+"='"+(value[x]==undefined?value[0]:value[x])+"'";
+                    }
+
+                    if(whereFields.length-1==i){
+                        assemblySQL+="";
+                    }else{
+                        assemblySQL+=" AND "
+                    }
+
+                }
+
+                if(""!=sqlValue){
+                    assemblySQL+="  "+sqlValue+" "+"; </br>"
+                }else{
+                    assemblySQL+="; </br>"
+                }
+                sqlData+=assemblySQL;
+
+            }
+
+            document.getElementById("SQLText").innerHTML=sqlData+"</br> size:"+maxsize;
+
+
+
+
+            // alert("装配SQL"+fieldsmap.size+"======"+wheremap.size+"===="+fieldsmap.get("field_tanli_COST"));
+        }
+
+        function assemblySELECTSQL(){
+            var fields=document.getElementById("fields").value.split(",");
+            var whereFields=document.getElementById("whereFields").value.split(",");
+            var sqlValue=document.getElementById("SQLRigth").value;
+            var fieldsmap=new Map();
+            var wheremap=new Map();
+
+            var maxsize=0;
+
+            for (var i=0;i<whereFields.length;i++){
+                var key="where_tanli_"+whereFields[i];
+                var value=document.getElementById(key).value.split(" ");
+                if(maxsize<value.length){
+                    maxsize=value.length;
+                }
+                wheremap.set(key,value)
+            }
+
+            if(maxsize<0 || maxsize==0){
+                alert("参数有异常");
+                return;
+            }
+
+            var sqlData="";
+            var table =document.getElementById("table").value;
+            //自定义优先
+            var customTable =document.getElementById("customTable").value;
+            if (customTable.length>0){
+                table=customTable;
+            }
+
+            for (x=0;x<maxsize;x++){
+
+
+                var assemblySQL=" SELECT *  FROM "+table+"  "
+
+
+                assemblySQL+=" WHERE "
+                for (var i=0;i<whereFields.length;i++){
+                    var key="where_tanli_"+whereFields[i];
+                    var value=document.getElementById(key).value.split(" ");
+
+                    if(key.toLocaleUpperCase().indexOf("COST")!=-1){
+                        assemblySQL+=" "+whereFields[i]+"="+(value[x]==undefined?value[0]:value[x]);
+                    }else{
+                        assemblySQL+=" "+whereFields[i]+"='"+(value[x]==undefined?value[0]:value[x])+"'";
+                    }
+
+                    if(whereFields.length-1==i){
+                        assemblySQL+="";
+                    }else{
+                        assemblySQL+=" AND "
+                    }
+                }
+
+                if(""!=sqlValue){
+                    assemblySQL+="  "+sqlValue+" "+"; </br>"
+                }else{
+                     assemblySQL+="; </br>"
+                }
+                sqlData+=assemblySQL;
+
+            }
+
+            document.getElementById("SELECTSQLText").innerHTML=sqlData+"</br> size:"+maxsize;
+
+
+
+
+            // alert("装配SQL"+fieldsmap.size+"======"+wheremap.size+"===="+fieldsmap.get("field_tanli_COST"));
+        }
+
+        function  rowColosClick() {
+            var glf=document.getElementById("glf").value;
+          var inputvalue= document.getElementById("inputtextDM").value;
+         var vsd=inputvalue.split(" ");
+         var outValue="";
+         for(i=0;i<vsd.length;i++){
+             if (glf==",") {
+                 outValue += "'" + vsd[i] + "',";
+             }else{
+                 outValue+=vsd[i] + ",";
+             }
+         }
+         document.getElementById("rowsC").value=outValue.substring(0,outValue.length-1);
+
+        }
+    </script>
+</head>
+<body onload="clickinit()">
+<DIV>
+    自定义表:
+    <input id="customTable" name="customTable"/>
+表名:
+    <select id="table" name="table">
+        <option value="BILL_BUY_BALANCE">BILL_BUY_BALANCE</option>
+        <option value="BILL_SALE_BALANCE">BILL_SALE_BALANCE</option>
+    </select>
+更新字段
+<input id="fields" name="fields" value="COST,COST_CHECKED"  style="width:400px"  onchange="clickinit()"/>
+条件
+<input id="whereFields"  name="whereFields" value="ORIGINAL_BILL_NO,ITEM_CODE,COST" style="width:400px" onchange="clickinit()"/></br>
+    <input id="SQLRigth" type="text">
+    <input type="button" onclick="clickinit()" name="拆解框框" value="拆解框框">
+    </br>
+    <input type="text" id="rowsC">
+    <input type="button" onclick="rowColosClick()" value="<<<<<<<<<<">
+    <input type="text" id="inputtextDM" style="width:200px;height:150px">
+    <select id="glf">
+        <option value=",">,</option>
+        <option value="">空</option>
+    </select>
+</DIV>
+<DIV id="inputText">
+
+</DIV>
+<input type="button" onclick="assemblySQL()" name="装配SQL" value="装配SQL">  <input type="button" onclick="assemblySELECTSQL()" name="装配SELECTSQL" value="装配SELECTSQL">
+<DIV id="SQLText">
+
+</DIV>
+<DIV id="SELECTSQLText">
+
+</DIV>
+
+
+</body>
+</html>

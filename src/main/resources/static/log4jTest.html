@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Log4j_sql</title>
+
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript">
+        var sqlflag = "Preparing:";
+        var parmasflag = "Parameters:";
+        var totalflag = "Total:";
+        var types = ['String', 'Integer'];
+
+        function onsendLog() {
+
+            var logParameter = document.getElementById("logParameter").value;
+            var id_sql=document.getElementById("id_sql").innerHTML;
+            $.ajax({
+                url: "/logController/insertSqlLog",
+                type: "post",
+                dataType: 'json',
+                contentType: "application/json",
+                data: '{"type":"Log4J","log_sql":"'+escape(logParameter)+'","sql_text":"'+escape(id_sql)+'"}',
+                success: function (result) {
+                }
+            });
+        }
+
+        function testOnClick() {
+            var LengSql = 1;
+            var logParameter = document.getElementById("logParameter").value;
+            document.getElementById("id_sql").innerHTML = "";
+            var sqlOne = logParameter.split(/\n/);
+
+
+            for (var i = 0; i < sqlOne.length; i++) {
+
+                if (sqlOne[i].indexOf(sqlflag) != -1) {
+
+                    if (sqlOne[i + 1].indexOf(sqlflag) != -1) {
+                        //当两个一模一样的参数放在一起的不符合规范
+                        continue;
+                    }
+                    var shuchusql = "";
+                    var canshux = "";
+                    var totalcout = "";
+                    var sqlOne_sql = sqlOne[i].split(sqlflag);
+                    //sql
+                    var sql = sqlOne_sql[1].trim();
+                    //参数
+                    var canshu = sqlOne[i + 1].split(parmasflag);
+
+                    //返回数据条数
+                    var total = [];
+                    if (sqlOne[i + 2] != undefined) {
+                        total = sqlOne[i + 2].split(totalflag) == undefined ? 0 : sqlOne[i + 2].split(totalflag);
+                    } else {
+                        total = ["0", "0"];
+                    }
+
+                    totalcout = "--  返回结果：total=" + total[1] + "\n";
+
+                    var cass = canshu[1] == undefined ? "" : canshu[1].trim();
+
+                    canshux = "--  参数:" + cass + "\n";
+                    var canshulist = cass == "" ? "" : cass.split(",");
+                    var sqllist = sql.split("?");
+
+                    console.log("=======" + sqllist.length);
+
+                    if (canshulist.length === (sqllist.length - 1)) {
+                        for (var sl = 0; sl < sqllist.length; sl++) {
+                            var sqq1 = sqllist[sl];
+                            var css1 = canshulist[sl];
+                            if (sqq1 === " ") {
+                                sqq1 = "";
+                            }
+                            if (css1 == undefined) {
+                                css1 = "";
+                            } else {
+                                var type = dataType(css1)
+                                css1 = css1.split("(")[0].trim();
+                                if (type === "String") {
+                                    css1 = "'" + css1 + "'";
+                                }
+                            }
+                            shuchusql = shuchusql + sqq1 + css1;
+                        }
+                        shuchusql = shuchusql + ";" + "" +
+                            "\n";
+                    } else {
+                        shuchusql = "【参数有问题】 sql：" + sql + " \n 参数：" + canshu[1] + ";============" + sqllist.length + "====ca=" + canshulist.length;
+                    }
+
+                    var henggang = "--  =========================tanli-=====华丽的分割线===============================================" + "\n";
+                    var psql = "-- 【 SQL 编号:" + LengSql + "】\n" + shuchusql + canshux + totalcout + henggang;
+                    document.getElementById("id_sql").innerHTML = document.getElementById("id_sql").value + psql;
+                    LengSql++;
+
+                }
+            }
+
+        }
+
+        function dataType(sss) {
+            for (var i = 0; i < types.length; i++) {
+                if (sss.indexOf(types[i]) != -1) {
+                    return types[i];
+                }
+            }
+            return "String";
+        }
+
+        //去重
+        function dedupe(array) {
+            return Array.from(new Set(array));
+        }
+
+    </script>
+</head>
+<body>
+日志：</br>
+<textarea id="logParameter" rows="10" cols="200"></textarea></br>
+<input type="button" value="日志筛选出SQL" onclick="testOnClick()"></br>
+SQL</br>
+<textarea id="id_sql" rows="50" cols="200"></textarea></br>
+</body>
+</html>

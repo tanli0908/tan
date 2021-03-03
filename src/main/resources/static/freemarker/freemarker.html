@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板工具生成模板</title>
+    <script src="../jquery.min.js"></script>
+    <script src="freemarker.js"></script>
+</head>
+<body>
+    <div id="button-new">
+        <input type="button" value="按键生成" onclick="clickTransform()"/>
+    </div>
+    <div id="div-input">
+        脚本：
+        <textarea id="tableSql" rows="10" cols="1000"></textarea></br>
+
+        ========================================================================================================================
+        </br>
+        <input type="button" value="显示/隐藏转换结构" onclick="openClose('tableJava')">
+        <div id="tableJava" style="width: 800px;display: none">
+            <div id="tableColumnDiv" style="float: left">
+                <table id="tableColumn" border="1" cellspacing="0" width="400px">
+                    <tr>
+                        <td colspan="3">table对应字段名列</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">表名</td>
+                        <td colspan="2">order_main</td>
+                    </tr>
+                    <tr>
+                        <td>数据库字段名</td>
+                        <td>数据库字段类型</td>
+                        <td>数据库字段注释</td>
+                    </tr>
+                    <tr>
+                        <td>id</td>
+                        <td>类型</td>
+                        <td>注释</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: left;width: 40px">
+              转换
+            </div>
+            <div id="tableVoDiv" style="float: left">
+                <table id="tableVo" border="1" cellspacing="0" width="300px">
+                    <tr>
+                        <td colspan="3">JAVA对象</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">对象名</td>
+                        <td colspan="2">OrderMain</td>
+                    </tr>
+                    <tr>
+                        <td>JAVA字段名</td>
+                        <td>JAVA类型</td>
+                        <td>JAVA注释</td>
+                    </tr>
+                    <tr>
+                        <td>id</td>
+                        <td>id</td>
+                        <td>注释</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+    </br>
+        =======================================================================================================================</br>
+        <input type="button" value="生成JAVA VO对象" onclick="generateVOObjects()"/>
+        <input type="button" value="显/闭" onclick="openClose('generateVoDiv')"/><br>
+        <div id="generateVoDiv">
+<!--            <textarea id="javaVo" rows="10" cols="800"></textarea></br>-->
+        </div>
+        =========================================SQL脚本==============================================================================</br>
+        <input type="button" value="SQL脚本" onclick="generateSqlTable()"/>
+        <input type="button" value="显/闭" onclick="openClose('generateSqlJDBCDiv')"/><br>
+        选择</br>
+        BaseResultMap  <input type="checkbox" value="1" name="generateSQl"  checked="true" onclick="checkBoxName()"/>
+        Base_Column_List <input type="checkbox" value="2" name="generateSQl"  checked="true" onclick="checkBoxName()"/>
+        condition <input type="checkbox" value="3" name="generateSQl"  checked="true" onclick="checkBoxName()" />
+        selectCount  <input type="checkbox" value="4" name="generateSQl"  checked="true"  onclick="checkBoxName()"/></br>
+        selectByPage  <input type="checkbox" value="5" name="generateSQl" checked="true"  onclick="checkBoxName()"/>
+        insertSelective  <input type="checkbox" value="6" name="generateSQl"  checked="true" onclick="checkBoxName()"/>
+        updateSelective  <input type="checkbox" value="7" name="generateSQl"  checked="true" onclick="checkBoxName()"/>
+        deleteSelective  <input type="checkbox" value="8" name="generateSQl" checked="true" onclick="checkBoxName()"/></br>
+        </br>
+
+        <div id="generateSqlJDBCDiv">
+            <textarea id="generateSqlJDBCDiv_id_sql" rows="50" cols="200"></textarea></br>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>
