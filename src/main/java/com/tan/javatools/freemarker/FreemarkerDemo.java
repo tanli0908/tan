@@ -26,7 +26,7 @@ public class FreemarkerDemo {
 
 
     public static void main(String[] args) {
-        // step1 创建freeMarker配置实例
+        // step1 创建freeMarker配置实例  盛世
         Configuration configuration = new Configuration();
         Writer out = null;
         try {
