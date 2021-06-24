@@ -26,6 +26,11 @@
             });
         }
 
+        function dedupeRows(){
+            var logParameter = document.getElementById("logParameter").value;
+            var re=new RegExp("^\n\s\n$");
+            document.getElementById("logParameter").value=logParameter.replaceAll("\n\n","\n");
+        }
         function testOnClick() {
             var LengSql = 1;
             var logParameter = document.getElementById("logParameter").value;
@@ -120,6 +125,7 @@
 </head>
 <body>
 日志：</br>
+<input type="button" value="去除空行" onclick="dedupeRows()">
 <textarea id="logParameter" rows="10" cols="200"></textarea></br>
 <input type="button" value="日志筛选出SQL" onclick="testOnClick()"></br>
 SQL</br>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>替换工具</title>
+    <script src="../jquery.min.js"></script>
+    <script src="replace.js"></script>
+</head>
+<body>
+    <div id="button-new">
+
+    </div>
+<div>
+    <textarea id="replaceStr" rows="10" cols="200"></textarea>
+    <input type="button" value="replace" onclick="clickTransform()"/>
+    <select id="inputExcelType">
+        <option>excel</option>
+        <option>其他</option>
+    </select>
+    <select id="inputStrType">
+        <option>字符串</option>
+        <option>数字</option>
+    </select>
+    需要调换
+    <input type="text" id="beforRepStr" value="">
+    替换成
+    <input type="text" id="repalceId" SIZE="20" VALUE=","/>
+    <textarea id="afferStr" rows="10" cols="200"></textarea>
+</div>
+
+
+</body>
+</html>
