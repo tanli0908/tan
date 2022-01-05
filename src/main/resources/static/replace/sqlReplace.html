@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>sql特殊符号处理脚本</title>
+    <script src="../jquery.min.js"></script>
+    <script src="sqlReplace.js"></script>
+</head>
+<body onload="clickTransform()">
+替换脚本</br>
+<textarea rows="10" cols="150" id="e-sql" onchange="clickTransform()" >
+select * from able where a=? and b=?
+</textarea>
+</br>
+替换的值显示 </br>
+<div id="divTab">
+
+</div></br>
+结果显示</br>
+<textarea rows="10" cols="150" id="divValueTab" >
+</textarea>
+
+</br>
+<input type="button" name="点击" value="点击生替换的列" onclick="clickTransform()">
+<input type="button" name="点击" value="生成sql" onclick="pcSql()">
+
+
+
+</body>
+</html>
