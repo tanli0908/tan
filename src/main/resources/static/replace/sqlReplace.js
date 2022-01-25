@@ -15,6 +15,7 @@ $(function () {
             var vac=eqlvl[i];
             divTab.append(vac.substring(vac.lastIndexOf(" "),vac.length-1)+"<textarea cols='30' rows='8' id='tab1_"+i+"'/>");
         }
+
         // alert(len+"M--M"+esql);
     }
     pcSql=function (){

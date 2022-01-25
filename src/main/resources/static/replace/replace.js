@@ -5,6 +5,7 @@ $(function () {
 
         var str=[];
 
+
         var replaceStr=$("#replaceStr").val();
 
         var inputExcelType=$("#inputExcelType").val();
