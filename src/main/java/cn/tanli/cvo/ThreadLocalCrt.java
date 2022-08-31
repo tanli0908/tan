@@ -10,6 +10,16 @@ package cn.tanli.cvo;
  */
 public class ThreadLocalCrt {
 
+    
+    /***
+     * @MethodName 
+     * @param    
+     * @return  
+     * @Author tanli
+     * @Date 2022/5/9 16:55
+     * @throws
+     * @Description TODO  请描述方法功能 
+     */
     static ThreadLocal<String> localVar = new ThreadLocal<>();
 
     static void print(String str) {
